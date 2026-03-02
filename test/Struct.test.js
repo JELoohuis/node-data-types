@@ -32,6 +32,42 @@ describe('Struct', function() {
   it('should parse test data to buffer', function() {
     assert(dataBuf.equals(Buffer.from('0474657374f40103040100020003000400020201', 'hex')));
   });
+  it('should encode missing fields with default values by default', function() {
+    const S = Struct('DefaultMissing', {
+      a: DataTypes.uint8,
+      b: DataTypes.uint8,
+    });
+    const instance = new S({ a: 42 });
+    const buf = instance.toBuffer();
+    // Both fields encoded: a=42, b=0 (default)
+    assert.equal(buf.length, 2);
+    assert.equal(buf[0], 42);
+    assert.equal(buf[1], 0);
+  });
+  it('should skip missing fields when encodeMissingFieldsBehavior is skip', function() {
+    const S = Struct('SkipMissing', {
+      a: DataTypes.uint8,
+      b: DataTypes.uint8,
+      c: DataTypes.uint8,
+    }, { encodeMissingFieldsBehavior: 'skip' });
+    const instance = new S({ a: 10, c: 30 });
+    // b is set to defaultValue (0) by constructor, so it won't be skipped
+    // To truly skip, the field must be undefined
+    delete instance.b;
+    const buf = instance.toBuffer();
+    assert.equal(buf.length, 2);
+    assert.equal(buf[0], 10);
+    assert.equal(buf[1], 30);
+  });
+  it('should produce identical output with skip option when all fields provided', function() {
+    const defsA = { a: DataTypes.uint8, b: DataTypes.uint8 };
+    const defsB = { a: DataTypes.uint8, b: DataTypes.uint8 };
+    const Default = Struct('AllFieldsDefault', defsA);
+    const Skip = Struct('AllFieldsSkip', defsB, { encodeMissingFieldsBehavior: 'skip' });
+    const d = new Default({ a: 1, b: 2 });
+    const s = new Skip({ a: 1, b: 2 });
+    assert(d.toBuffer().equals(s.toBuffer()));
+  });
   it('should parse test data from buffer', function() {
     const refData = TestStruct.fromBuffer(dataBuf);
 
