@@ -51,9 +51,6 @@ describe('Struct', function() {
       c: DataTypes.uint8,
     }, { encodeMissingFieldsBehavior: 'skip' });
     const instance = new S({ a: 10, c: 30 });
-    // b is set to defaultValue (0) by constructor, so it won't be skipped
-    // To truly skip, the field must be undefined
-    delete instance.b;
     const buf = instance.toBuffer();
     assert.equal(buf.length, 2);
     assert.equal(buf[0], 10);
