@@ -39,6 +39,7 @@ describe('Struct', function() {
     });
     const instance = new S({ a: 42 });
     const buf = instance.toBuffer();
+
     // Both fields encoded: a=42, b=0 (default)
     assert.equal(buf.length, 2);
     assert.equal(buf[0], 42);
@@ -51,6 +52,10 @@ describe('Struct', function() {
       c: DataTypes.uint8,
     }, { encodeMissingFieldsBehavior: 'skip' });
     const instance = new S({ a: 10, c: 30 });
+
+    // In 'skip' mode, missing fields should remain unset
+    assert.strictEqual(instance.b, undefined);
+
     const buf = instance.toBuffer();
     assert.equal(buf.length, 2);
     assert.equal(buf[0], 10);
