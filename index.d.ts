@@ -164,6 +164,10 @@ declare module "@athombv/data-types" {
     toBuffer(buffer?: Buffer, value?: StructInstance<Defs>, index?: number): number;
   }
 
+  type StructProperties<Defs extends Record<string, DataType<any>>> = {
+    [Property in keyof Defs]: Defs[Property] extends DataType<infer Type> ? Type : never;
+  };
+
   type StructInstance<Defs extends Record<string, DataType<any>>> = StructProperties<Defs> & {
     toJSON: () => StructProperties<Defs>;
     toBuffer: (buffer?: Buffer, index?: number) => Buffer;
@@ -175,14 +179,6 @@ declare module "@athombv/data-types" {
     opts?: { encodeMissingFieldsBehavior?: "default" | "skip" },
   ): StaticStruct<Defs>;
 }
-
-type StructProperties<Defs extends Record<string, import("@athombv/data-types").DataType<any>>> = {
-  [Property in keyof Defs]: Defs[Property] extends import("@athombv/data-types").DataType<
-    infer Type
-  >
-    ? Type
-    : never;
-};
 
 /*
 How to use @athombv/data-types in TypeScript:
