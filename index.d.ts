@@ -1,5 +1,14 @@
 declare module "@athombv/data-types" {
   class DataType<Value> {
+    constructor(
+      id: number,
+      shortName: string,
+      length: number,
+      toBuffer: (buffer: Buffer, value: Value, index?: number) => number,
+      fromBuffer: (buffer: Buffer, index?: number) => Value,
+      ...args: Array<unknown>,
+    )
+
     id: number;
     shortName: string;
     length: number;
@@ -15,24 +24,25 @@ declare module "@athombv/data-types" {
   const DataTypes: {
     noData: DataType<null>,
 
-    data8 : DataType<number>,
-    data16: DataType<number>,
-    data24: DataType<number>,
-    data32: DataType<number>,
-    data40: DataType<number>,
-    data48: DataType<number>,
-    data56: DataType<number>,
+    data8 : DataType<Buffer>,
+    data16: DataType<Buffer>,
+    data24: DataType<Buffer>,
+    data32: DataType<Buffer>,
+    data40: DataType<Buffer>,
+    data48: DataType<Buffer>,
+    data56: DataType<Buffer>,
+    data64: DataType<Buffer>
 
-    bool: DataType<boolean>,
+    bool: DataType<boolean | null>,
 
-    map8 : <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map16: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map24: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map32: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map40: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map48: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map56: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
-    map64: <Flags extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
+    map8 : <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map16: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map24: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map32: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map40: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map48: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map56: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map64: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
 
     uint8 : DataType<number>,
     uint16: DataType<number>,
@@ -60,7 +70,7 @@ declare module "@athombv/data-types" {
     single: DataType<number>,
     double: DataType<number>,
 
-    octstr: DataType<string>,
+    octstr: DataType<Buffer>,
     string: DataType<string>,
     // octstr16: DataType<string>,
     // string16: DataType<string>,
@@ -83,7 +93,7 @@ declare module "@athombv/data-types" {
     key128: DataType<string>,
 
     //* Internal Types *//
-    map4 : <Flags  extends string | null>(flags: Array<Flags>) => DataType<BitMap<Flags>>,
+    map4 : <Flags  extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
     uint4: DataType<number>,
     enum4: <Flags extends string>(flags: Record<Flags, number>) => DataType<Flags>,
 
@@ -91,12 +101,12 @@ declare module "@athombv/data-types" {
     buffer8 : DataType<Buffer>,
     buffer16: DataType<Buffer>,
 
-    Array0: <Type>(type: Type) => DataType<Array<Type>>,
-    Array8: <Type>(type: Type) => DataType<Array<Type>>,
+    Array0: <Type>(type: DataType<Type>) => DataType<Array<Type>>,
+    Array8: <Type>(type: DataType<Type>) => DataType<Array<Type>>,
     FixedString: (length: number) => DataType<string>,
   };
 
-  class BitMap<Flags extends string | null> {
+  class Bitmap<Flags extends string | null> {
     _buffer: Buffer;
     _fields: Array<Flags>;
     setBit(index: number, value: boolean): void;
@@ -105,12 +115,12 @@ declare module "@athombv/data-types" {
     setBits(bits: number | Array<Flags>): void;
     getBits(): Array<Flags>;
     get length(): number;
-    static fromBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags>): BitMap<Flags>;
+    static fromBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags>): Bitmap<Flags>;
     static toBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags>, value: number): number;
-    static toBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags> | undefined, value: BitMap<Flags>): number;
+    static toBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags> | undefined, value: Bitmap<Flags>): number;
     toArray(): Array<Flags>;
     toBuffer(buffer: Buffer, index: number): Buffer;
-    copy(): BitMap<Flags>;
+    copy(): Bitmap<Flags>;
     toJSON(): object;
     inspect(): string;
   }
@@ -126,12 +136,12 @@ declare module "@athombv/data-types" {
       result: StructInstance<Defs>,
       length: number,
     }
-    toBuffer(buffer: Buffer, value: StructInstance<Defs>, index?: number): number;
+    toBuffer(buffer?: Buffer, value?: StructInstance<Defs>, index?: number): number;
   }
 
   type StructInstance<Defs extends Record<string, import('@athombv/data-types').DataType<any>>> = StructProperties<Defs> & {
     toJSON: () => StructProperties<Defs>;
-    toBuffer: (buffer: Buffer, index?: number) => Buffer;
+    toBuffer: (buffer?: Buffer, index?: number) => Buffer;
   }
 
   function Struct<Defs extends Record<string, DataType<any>>> (name: string, defs: Defs, opts?: {encodeMissingFieldsBehavior?: 'default' | 'skip'}): StaticStruct<Defs>;
