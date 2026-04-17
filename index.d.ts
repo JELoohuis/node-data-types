@@ -155,25 +155,24 @@ type StructProperties<Defs extends Record<string, import('@athombv/data-types').
 /*
 How to use @athombv/data-types in TypeScript:
 
-// Create a type that represents the Struct data
-const ZdoEndDeviceAnnounceIndication = {
+// Create a Struct instance
+const ZdoEndDeviceAnnounceIndicationStruct = Struct("ZdoEndDeviceAnnounceIndication", {
   srcAddr: DataTypes.uint16,
   IEEEAddr: DataTypes.EUI64,
-};
+});
 
-// Create a Struct instance with generic type ZdoEndDeviceAnnounceIndication
-const ZdoEndDeviceAnnounceIndicationStruct = Struct("ZdoEndDeviceAnnounceIndication", ZdoEndDeviceAnnounceIndication);
-
-// Create ZdoEndDeviceAnnounceIndication object
+// Create ZdoEndDeviceAnnounceIndication object from a buffer
 const ZdoEndDeviceAnnounceObject = ZdoEndDeviceAnnounceIndicationStruct.fromBuffer(
   Buffer.from([0, 1, 2, 3])
 );
 
-ZdoEndDeviceAnnounceObject.srcAddr.trim(); // This errors, srcAddr is not a string
+// @ts-expect-error srcAddr is not a string
+ZdoEndDeviceAnnounceObject.srcAddr.trim();
 
 // Create Buffer instance from ZdoEndDeviceAnnounceObject
 const ZdoEndDeviceAnnounceBuffer = Buffer.alloc(8);
-ZdoEndDeviceAnnounceIndicationStruct.toBuffer(ZdoEndDeviceAnnounceBuffer, { srcAddr: 1, IEEAddr: 'abc' }); // This errors due to typo in IEEEAddr name
+// @ts-expect-error typo in IEEEAddr name
+ZdoEndDeviceAnnounceIndicationStruct.toBuffer(ZdoEndDeviceAnnounceBuffer, { srcAddr: 1, IEEAddr: 'abc' });
 
 Known limitations:
 - Structs in Structs are considered a no-go by these definitions.
