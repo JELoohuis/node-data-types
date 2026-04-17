@@ -103,12 +103,14 @@ declare module "@athombv/data-types" {
 
     Array0: {
       <T>(type: DataType<T>): DataType<Array<T>>;
+      // Overload to allow structs in arrays
       <Defs extends Record<string, StructField>>(
         type: StaticStruct<Defs>,
       ): DataType<Array<StructProperties<Defs>>>;
     };
     Array8: {
       <T>(type: DataType<T>): DataType<Array<T>>;
+      // Overload to allow structs in arrays
       <Defs extends Record<string, StructField>>(
         type: StaticStruct<Defs>,
       ): DataType<Array<StructProperties<Defs>>>;
