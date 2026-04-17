@@ -146,7 +146,9 @@ declare module "@athombv/data-types" {
     inspect(): string;
   }
 
-  interface StaticStruct<Defs extends Record<string, DataType<any>>> {
+  type StructField = DataType<any> | StaticStruct<any>;
+
+  interface StaticStruct<Defs extends Record<string, StructField>> {
     get fields(): Defs;
     get name(): string;
     get length(): number;
@@ -161,19 +163,23 @@ declare module "@athombv/data-types" {
       result: StructInstance<Defs>;
       length: number;
     };
-    toBuffer(buffer?: Buffer, value?: StructInstance<Defs>, index?: number): number;
+    toBuffer(buffer?: Buffer, value?: StructProperties<Defs>, index?: number): number;
   }
 
-  type StructProperties<Defs extends Record<string, DataType<any>>> = {
-    [Property in keyof Defs]: Defs[Property] extends DataType<infer Type> ? Type : never;
+  type StructProperties<Defs extends Record<string, StructField>> = {
+    [Property in keyof Defs]: Defs[Property] extends DataType<infer Type>
+      ? Type
+      : Defs[Property] extends StaticStruct<infer InnerDefs extends Record<string, StructField>>
+        ? StructProperties<InnerDefs>
+        : never;
   };
 
-  type StructInstance<Defs extends Record<string, DataType<any>>> = StructProperties<Defs> & {
+  type StructInstance<Defs extends Record<string, StructField>> = StructProperties<Defs> & {
     toJSON: () => StructProperties<Defs>;
     toBuffer: (buffer?: Buffer, index?: number) => Buffer;
   };
 
-  function Struct<Defs extends Record<string, DataType<any>>>(
+  function Struct<Defs extends Record<string, StructField>>(
     name: string,
     defs: Defs,
     opts?: { encodeMissingFieldsBehavior?: "default" | "skip" },
@@ -202,7 +208,5 @@ const ZdoEndDeviceAnnounceBuffer = Buffer.alloc(8);
 // @ts-expect-error typo in IEEEAddr name
 ZdoEndDeviceAnnounceIndicationStruct.toBuffer(ZdoEndDeviceAnnounceBuffer, { srcAddr: 1, IEEAddr: 'abc' });
 
-Known limitations:
-- Structs in Structs are considered a no-go by these definitions.
-- Struct.fromArgs cannot be typed.
+Known limitation: Struct.fromArgs cannot be typed.
 */
