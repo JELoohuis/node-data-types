@@ -101,8 +101,18 @@ declare module "@athombv/data-types" {
     buffer8: DataType<Buffer>;
     buffer16: DataType<Buffer>;
 
-    Array0: <Type>(type: DataType<Type>) => DataType<Array<Type>>;
-    Array8: <Type>(type: DataType<Type>) => DataType<Array<Type>>;
+    Array0: {
+      <T>(type: DataType<T>): DataType<Array<T>>;
+      <Defs extends Record<string, StructField>>(
+        type: StaticStruct<Defs>,
+      ): DataType<Array<StructProperties<Defs>>>;
+    };
+    Array8: {
+      <T>(type: DataType<T>): DataType<Array<T>>;
+      <Defs extends Record<string, StructField>>(
+        type: StaticStruct<Defs>,
+      ): DataType<Array<StructProperties<Defs>>>;
+    };
     FixedString: (length: number) => DataType<string>;
   };
 
@@ -207,6 +217,9 @@ ZdoEndDeviceAnnounceObject.srcAddr.trim();
 const ZdoEndDeviceAnnounceBuffer = Buffer.alloc(8);
 // @ts-expect-error typo in IEEEAddr name
 ZdoEndDeviceAnnounceIndicationStruct.toBuffer(ZdoEndDeviceAnnounceBuffer, { srcAddr: 1, IEEAddr: 'abc' });
+
+const Item = Struct('Item', { a: DataTypes.uint8, b: DataTypes.uint8 });
+const ArrayOfItems = DataTypes.Array8(Item);
 
 Known limitation: Struct.fromArgs cannot be typed.
 */
