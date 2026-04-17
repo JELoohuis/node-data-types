@@ -106,7 +106,11 @@ declare module "@athombv/data-types" {
     FixedString: (length: number) => DataType<string>;
   };
 
-  class Bitmap<Flags extends string | null> {
+  type Bitmap<Flags extends string | null> = BitmapBase<Flags> & {
+    [K in Flags as K extends string ? K : never]: boolean;
+  };
+
+  class BitmapBase<Flags extends string | null> {
     _buffer: Buffer;
     _fields: Array<Flags>;
     setBit(index: number, value: boolean): void;
