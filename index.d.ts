@@ -139,7 +139,7 @@ declare module "@athombv/data-types" {
     toBuffer(buffer?: Buffer, value?: StructInstance<Defs>, index?: number): number;
   }
 
-  type StructInstance<Defs extends Record<string, import('@athombv/data-types').DataType<any>>> = StructProperties<Defs> & {
+  type StructInstance<Defs extends Record<string, DataType<any>>> = StructProperties<Defs> & {
     toJSON: () => StructProperties<Defs>;
     toBuffer: (buffer?: Buffer, index?: number) => Buffer;
   }
