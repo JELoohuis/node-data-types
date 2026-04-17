@@ -62,9 +62,9 @@ declare module "@athombv/data-types" {
     // int56: DataType<number>,
     // int64: DataType<number>,
 
-    enum8 : <Flags extends string>(flags: Record<Flags, number>) => DataType<Flags>,
-    enum16: <Flags extends string>(flags: Record<Flags, number>) => DataType<Flags>,
-    enum32: <Flags extends string>(flags: Record<Flags, number>) => DataType<Flags>,
+    enum8 : <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
+    enum16: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
+    enum32: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
 
     // semi: DataType<number>,
     single: DataType<number>,
@@ -95,7 +95,7 @@ declare module "@athombv/data-types" {
     //* Internal Types *//
     map4 : <Flags  extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
     uint4: DataType<number>,
-    enum4: <Flags extends string>(flags: Record<Flags, number>) => DataType<Flags>,
+    enum4: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
 
     buffer  : DataType<Buffer>,
     buffer8 : DataType<Buffer>,
