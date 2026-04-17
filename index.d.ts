@@ -6,8 +6,8 @@ declare module "@athombv/data-types" {
       length: number,
       toBuffer: (buffer: Buffer, value: Value, index?: number) => number,
       fromBuffer: (buffer: Buffer, index?: number) => Value,
-      ...args: Array<unknown>,
-    )
+      ...args: Array<unknown>
+    );
 
     id: number;
     shortName: string;
@@ -22,56 +22,56 @@ declare module "@athombv/data-types" {
   }
 
   const DataTypes: {
-    noData: DataType<null>,
+    noData: DataType<null>;
 
-    data8 : DataType<Buffer>,
-    data16: DataType<Buffer>,
-    data24: DataType<Buffer>,
-    data32: DataType<Buffer>,
-    data40: DataType<Buffer>,
-    data48: DataType<Buffer>,
-    data56: DataType<Buffer>,
-    data64: DataType<Buffer>
+    data8: DataType<Buffer>;
+    data16: DataType<Buffer>;
+    data24: DataType<Buffer>;
+    data32: DataType<Buffer>;
+    data40: DataType<Buffer>;
+    data48: DataType<Buffer>;
+    data56: DataType<Buffer>;
+    data64: DataType<Buffer>;
 
-    bool: DataType<boolean | null>,
+    bool: DataType<boolean | null>;
 
-    map8 : <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map16: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map24: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map32: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map40: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map48: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map56: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    map64: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
+    map8: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map16: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map24: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map32: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map40: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map48: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map56: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    map64: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
 
-    uint8 : DataType<number>,
-    uint16: DataType<number>,
-    uint24: DataType<number>,
-    uint32: DataType<number>,
-    uint40: DataType<number>,
-    uint48: DataType<number>,
+    uint8: DataType<number>;
+    uint16: DataType<number>;
+    uint24: DataType<number>;
+    uint32: DataType<number>;
+    uint40: DataType<number>;
+    uint48: DataType<number>;
     // uint56: DataType<number>,
     // uint64: DataType<number>,
 
-    int8 : DataType<number>,
-    int16: DataType<number>,
-    int24: DataType<number>,
-    int32: DataType<number>,
-    int40: DataType<number>,
-    int48: DataType<number>,
+    int8: DataType<number>;
+    int16: DataType<number>;
+    int24: DataType<number>;
+    int32: DataType<number>;
+    int40: DataType<number>;
+    int48: DataType<number>;
     // int56: DataType<number>,
     // int64: DataType<number>,
 
-    enum8 : <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
-    enum16: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
-    enum32: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
+    enum8: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
+    enum16: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
+    enum32: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
 
     // semi: DataType<number>,
-    single: DataType<number>,
-    double: DataType<number>,
+    single: DataType<number>;
+    double: DataType<number>;
 
-    octstr: DataType<Buffer>,
-    string: DataType<string>,
+    octstr: DataType<Buffer>;
+    string: DataType<string>;
     // octstr16: DataType<string>,
     // string16: DataType<string>,
 
@@ -88,22 +88,22 @@ declare module "@athombv/data-types" {
     // attribId
 
     // bacOID
-    EUI48 : DataType<string>,
-    EUI64 : DataType<string>,
-    key128: DataType<string>,
+    EUI48: DataType<string>;
+    EUI64: DataType<string>;
+    key128: DataType<string>;
 
     //* Internal Types *//
-    map4 : <Flags  extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>,
-    uint4: DataType<number>,
-    enum4: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>,
+    map4: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
+    uint4: DataType<number>;
+    enum4: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
 
-    buffer  : DataType<Buffer>,
-    buffer8 : DataType<Buffer>,
-    buffer16: DataType<Buffer>,
+    buffer: DataType<Buffer>;
+    buffer8: DataType<Buffer>;
+    buffer16: DataType<Buffer>;
 
-    Array0: <Type>(type: DataType<Type>) => DataType<Array<Type>>,
-    Array8: <Type>(type: DataType<Type>) => DataType<Array<Type>>,
-    FixedString: (length: number) => DataType<string>,
+    Array0: <Type>(type: DataType<Type>) => DataType<Array<Type>>;
+    Array8: <Type>(type: DataType<Type>) => DataType<Array<Type>>;
+    FixedString: (length: number) => DataType<string>;
   };
 
   class Bitmap<Flags extends string | null> {
@@ -115,9 +115,26 @@ declare module "@athombv/data-types" {
     setBits(bits: number | Array<Flags>): void;
     getBits(): Array<Flags>;
     get length(): number;
-    static fromBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags>): Bitmap<Flags>;
-    static toBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags>, value: number): number;
-    static toBuffer<Flags extends string | null>(buffer: Buffer, index: number, length: number, flags: Array<Flags> | undefined, value: Bitmap<Flags>): number;
+    static fromBuffer<Flags extends string | null>(
+      buffer: Buffer,
+      index: number,
+      length: number,
+      flags: Array<Flags>,
+    ): Bitmap<Flags>;
+    static toBuffer<Flags extends string | null>(
+      buffer: Buffer,
+      index: number,
+      length: number,
+      flags: Array<Flags>,
+      value: number,
+    ): number;
+    static toBuffer<Flags extends string | null>(
+      buffer: Buffer,
+      index: number,
+      length: number,
+      flags: Array<Flags> | undefined,
+      value: Bitmap<Flags>,
+    ): number;
     toArray(): Array<Flags>;
     toBuffer(buffer: Buffer, index: number): Buffer;
     copy(): Bitmap<Flags>;
@@ -132,25 +149,36 @@ declare module "@athombv/data-types" {
     fromJSON(props: any): StructInstance<Defs>;
     fromArgs(...args: Array<unknown>): StructInstance<Defs>;
     fromBuffer(buffer: Buffer, index?: number, returnLength?: false): StructInstance<Defs>;
-    fromBuffer(buffer: Buffer, index?: number, returnLength?: true): {
-      result: StructInstance<Defs>,
-      length: number,
-    }
+    fromBuffer(
+      buffer: Buffer,
+      index?: number,
+      returnLength?: true,
+    ): {
+      result: StructInstance<Defs>;
+      length: number;
+    };
     toBuffer(buffer?: Buffer, value?: StructInstance<Defs>, index?: number): number;
   }
 
   type StructInstance<Defs extends Record<string, DataType<any>>> = StructProperties<Defs> & {
     toJSON: () => StructProperties<Defs>;
     toBuffer: (buffer?: Buffer, index?: number) => Buffer;
-  }
+  };
 
-  function Struct<Defs extends Record<string, DataType<any>>> (name: string, defs: Defs, opts?: {encodeMissingFieldsBehavior?: 'default' | 'skip'}): StaticStruct<Defs>;
+  function Struct<Defs extends Record<string, DataType<any>>>(
+    name: string,
+    defs: Defs,
+    opts?: { encodeMissingFieldsBehavior?: "default" | "skip" },
+  ): StaticStruct<Defs>;
 }
 
-type StructProperties<Defs extends Record<string, import('@athombv/data-types').DataType<any>>> = {
-  [Property in keyof Defs]: Defs[Property] extends import('@athombv/data-types').DataType<infer Type> ? Type : never
-}
-
+type StructProperties<Defs extends Record<string, import("@athombv/data-types").DataType<any>>> = {
+  [Property in keyof Defs]: Defs[Property] extends import("@athombv/data-types").DataType<
+    infer Type
+  >
+    ? Type
+    : never;
+};
 
 /*
 How to use @athombv/data-types in TypeScript:
