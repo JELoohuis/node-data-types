@@ -126,7 +126,7 @@ declare module "@athombv/data-types" {
   class BitmapBase<Flags extends string | null> {
     _buffer: Buffer;
     _fields: Array<Flags>;
-    setBit(index: number, value: boolean): void;
+    setBit(index: number, value?: boolean): void;
     getBit(index: number): boolean;
     clearBit(index: number): void;
     setBits(bits: number | Array<Flags>): void;
