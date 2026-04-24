@@ -24,10 +24,10 @@ declare module "@athombv/data-types" {
   const DataTypes: {
     noData: DataType<null>;
 
-    data8: DataType<Buffer>;
-    data16: DataType<Buffer>;
-    data24: DataType<Buffer>;
-    data32: DataType<Buffer>;
+    data8: DataType<number>;
+    data16: DataType<number>;
+    data24: DataType<number>;
+    data32: DataType<number>;
     data40: DataType<Buffer>;
     data48: DataType<Buffer>;
     data56: DataType<Buffer>;

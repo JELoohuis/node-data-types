@@ -60,11 +60,11 @@ const datas = Struct("Datas", {
   d16: DataTypes.data16,
   d64: DataTypes.data64,
 }).fromBuffer(emptyBuf());
-const _dataD8: Buffer = datas.d8;
-const _dataD16: Buffer = datas.d16;
+const _dataD8: number = datas.d8;
+const _dataD16: number = datas.d16;
 const _dataD64: Buffer = datas.d64;
-// @ts-expect-error data8 is Buffer, not number
-const _dataD8Wrong: number = datas.d8;
+// @ts-expect-error data64 is Buffer, not number
+const _dataD64Wrong: number = datas.d64;
 
 // octstr returns Buffer, string returns string (octstr was incorrectly typed as string before)
 const strs = Struct("Strs", {
