@@ -104,9 +104,11 @@ const _bufPlain: Buffer = bufs.b;
 const _buf8: Buffer = bufs.b8;
 const _buf16: Buffer = bufs.b16;
 
-// noData always returns null
+// noData always returns { result:null, length: 0 }
 const none = Struct("None", { n: DataTypes.noData }).fromBuffer(emptyBuf());
-const _noData: null = none.n;
+const _noData: null = none.n.result;
+// @ts-expect-error noData.fromBuffer always returns an object
+const _wrongNoData: null = DataTypes.noData.fromBuffer(emptyBuf());
 
 // ===========================================================================
 // 2. Enum narrowing

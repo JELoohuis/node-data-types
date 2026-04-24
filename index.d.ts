@@ -22,7 +22,8 @@ declare module "@athombv/data-types" {
   }
 
   const DataTypes: {
-    noData: DataType<null>;
+    // noData.toBuffer returns null instead of a number, but then noData would no longer implement the DataType interface
+    noData: DataType<{ result:null, length: 0 }>
 
     data8: DataType<number>;
     data16: DataType<number>;
