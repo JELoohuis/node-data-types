@@ -134,6 +134,11 @@ if (mode.m === "UNKNOWN") {
 const Half = DataTypes.enum4({ LO: 0, HI: 1 });
 const half = Struct("Half", { h: Half, _pad: DataTypes.uint4 }).fromBuffer(emptyBuf(1));
 const _half: "LO" | "HI" = half.h;
+// @ts-expect-error value should be part of the enum
+const _halfWrong: "Wrong" = half.h;
+const _halfDefault: "LO" | "HI" = Half.defaultValue;
+// @ts-expect-error default value should be part of the enum
+const _halfDefaultWrong: "Wrong" = Half.defaultValue;
 
 // Numeric keys are supported (new in this PR). Object literal numeric keys
 // become strings at runtime, but the type allows either.
