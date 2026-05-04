@@ -1,10 +1,10 @@
 declare module "@athombv/data-types" {
-  class DataType<ToBuffer, FromBuffer = ToBuffer> {
+  class DataType<ToBuffer, FromBuffer = ToBuffer, ToBufferReturn = number> {
     constructor(
       id: number,
       shortName: string,
       length: number,
-      toBuffer: (buffer: Buffer, value: ToBuffer, index?: number) => number,
+      toBuffer: (buffer: Buffer, value: ToBuffer, index?: number) => ToBufferReturn,
       fromBuffer: (buffer: Buffer, index?: number) => FromBuffer,
       ...args: Array<unknown>
     );
@@ -12,7 +12,7 @@ declare module "@athombv/data-types" {
     id: number;
     shortName: string;
     length: number;
-    toBuffer: (buffer: Buffer, value: ToBuffer, index?: number) => number;
+    toBuffer: (buffer: Buffer, value: ToBuffer, index?: number) => ToBufferReturn;
     fromBuffer: (buffer: Buffer, index?: number) => FromBuffer;
     args: Array<unknown>;
     defaultValue: FromBuffer;
@@ -22,8 +22,7 @@ declare module "@athombv/data-types" {
   }
 
   const DataTypes: {
-    // noData.toBuffer returns null instead of a number, but then noData would no longer implement the DataType interface
-    noData: DataType<any, { result:null, length: 0 }>
+    noData: DataType<any, { result:null, length: 0 }, null>
 
     data8: DataType<number>;
     data16: DataType<number>;
@@ -159,7 +158,7 @@ declare module "@athombv/data-types" {
     inspect(): string;
   }
 
-  type StructField = DataType<any> | StaticStruct<any>;
+  type StructField = DataType<any, any, any> | StaticStruct<any>;
 
   interface StaticStruct<Defs extends Record<string, StructField>> {
     get fields(): Defs;
@@ -180,7 +179,7 @@ declare module "@athombv/data-types" {
   }
 
   type StructProperties<Defs extends Record<string, StructField>> = {
-    [Property in keyof Defs]: Defs[Property] extends DataType<infer ToBuffer, infer FromBuffer>
+    [Property in keyof Defs]: Defs[Property] extends DataType<infer ToBuffer, infer FromBuffer, any>
       ? FromBuffer
       : Defs[Property] extends StaticStruct<infer InnerDefs extends Record<string, StructField>>
         ? StructProperties<InnerDefs>

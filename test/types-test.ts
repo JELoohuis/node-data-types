@@ -115,6 +115,14 @@ const _noData: null = none.n.result;
 // @ts-expect-error noData.fromBuffer always returns an object
 const _wrongNoData: null = DataTypes.noData.fromBuffer(emptyBuf());
 
+const normalToBufferReturn: number = DataTypes.bool.toBuffer(emptyBuf(), true);
+// @ts-expect-error toBuffer normally returns number
+const wrongNormalToBufferReturn: null = DataTypes.bool.toBuffer(emptyBuf(), true);
+
+const _noDataToBufferReturn: null = DataTypes.noData.toBuffer(emptyBuf(), "anything")
+// @ts-expect-error noData.toBuffer returns null
+const _wrongNoDataToBufferReturn: number = DataTypes.noData.toBuffer(emptyBuf(), "anything")
+
 // ===========================================================================
 // 2. Enum narrowing
 // ---------------------------------------------------------------------------
