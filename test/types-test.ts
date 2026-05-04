@@ -84,6 +84,11 @@ const _bool: boolean | null = bools.b;
 // @ts-expect-error bool can be null, plain boolean is too narrow
 const _boolWrong: boolean = bools.b;
 
+DataTypes.bool.toBuffer(emptyBuf(), true);
+DataTypes.bool.toBuffer(emptyBuf(), null);
+// @ts-expect-error bool written to buffer must be boolean or null
+DataTypes.bool.toBuffer(emptyBuf(), 1);
+
 // EUI addresses / keys return string (hex-formatted)
 const addrs = Struct("Addrs", {
   e48: DataTypes.EUI48,
