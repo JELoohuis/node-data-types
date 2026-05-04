@@ -146,6 +146,19 @@ const Status = DataTypes.enum8({ 0x00: 0, 0x01: 1, 0x80: 2 });
 const statusEnum = Struct("StatusEnum", { s: Status }).fromBuffer(emptyBuf(1));
 const _statusVal = statusEnum.s; // type: "0" | "1" | "128" or similar
 
+// It could occur that a device returns a value outside of the enum.
+// In this case fromBuffer returns undefined.
+const UndefinedEnum = DataTypes.enum4<"Valid" | 1 | undefined>({Valid: 0, 1: 1})
+const undefinedEnum = Struct("Undefined", {enum: UndefinedEnum}).fromBuffer(emptyBuf());
+const undefinedEnumFromBuffer: 1 | "Valid" | undefined = undefinedEnum.enum;
+// @ts-expect-error enum value could be undefined
+const undefinedEnumFromBufferWrong: 1 | "Valid" = undefinedEnum.enum;
+// @ts-expect-error undefined enum value cannot be written to buffer
+UndefinedEnum.toBuffer(emptyBuf(), undefined);
+const undefinedEnumDefault : 1 | "Valid" | undefined = UndefinedEnum.defaultValue
+// @ts-expect-error default enum value could be undefined
+const undefinedEnumDefaultWrong : 1 | "Valid" = UndefinedEnum.defaultValue
+
 // ===========================================================================
 // 3. Bitmap (via mapN)
 // ---------------------------------------------------------------------------

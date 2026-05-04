@@ -1,21 +1,21 @@
 declare module "@athombv/data-types" {
-  class DataType<Value> {
+  class DataType<ToBuffer, FromBuffer = ToBuffer> {
     constructor(
       id: number,
       shortName: string,
       length: number,
-      toBuffer: (buffer: Buffer, value: Value, index?: number) => number,
-      fromBuffer: (buffer: Buffer, index?: number) => Value,
+      toBuffer: (buffer: Buffer, value: ToBuffer, index?: number) => number,
+      fromBuffer: (buffer: Buffer, index?: number) => FromBuffer,
       ...args: Array<unknown>
     );
 
     id: number;
     shortName: string;
     length: number;
-    toBuffer: (buffer: Buffer, value: Value, index?: number) => number;
-    fromBuffer: (buffer: Buffer, index?: number) => Value;
+    toBuffer: (buffer: Buffer, value: ToBuffer, index?: number) => number;
+    fromBuffer: (buffer: Buffer, index?: number) => FromBuffer;
     args: Array<unknown>;
-    defaultValue: Value;
+    defaultValue: FromBuffer;
 
     get isAnalog(): boolean;
     inspect(): string;
@@ -63,9 +63,9 @@ declare module "@athombv/data-types" {
     // int56: DataType<number>,
     // int64: DataType<number>,
 
-    enum8: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
-    enum16: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
-    enum32: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
+    enum8: <Flags extends string | number | undefined>(flags: Record<Flags, number>) => DataType<Exclude<Flags, undefined>, Flags>;
+    enum16: <Flags extends string | number | undefined>(flags: Record<Flags, number>) => DataType<Exclude<Flags, undefined>, Flags>;
+    enum32: <Flags extends string | number | undefined>(flags: Record<Flags, number>) => DataType<Exclude<Flags, undefined>, Flags>;
 
     // semi: DataType<number>,
     single: DataType<number>;
@@ -96,7 +96,7 @@ declare module "@athombv/data-types" {
     //* Internal Types *//
     map4: <Flags extends string | null>(...flags: Array<Flags>) => DataType<Bitmap<Flags>>;
     uint4: DataType<number>;
-    enum4: <Flags extends string | number>(flags: Record<Flags, number>) => DataType<Flags>;
+    enum4: <Flags extends string | number | undefined>(flags: Record<Flags, number>) => DataType<Exclude<Flags, undefined>, Flags>;
 
     buffer: DataType<Buffer>;
     buffer8: DataType<Buffer>;
@@ -180,8 +180,8 @@ declare module "@athombv/data-types" {
   }
 
   type StructProperties<Defs extends Record<string, StructField>> = {
-    [Property in keyof Defs]: Defs[Property] extends DataType<infer Type>
-      ? Type
+    [Property in keyof Defs]: Defs[Property] extends DataType<infer ToBuffer, infer FromBuffer>
+      ? FromBuffer
       : Defs[Property] extends StaticStruct<infer InnerDefs extends Record<string, StructField>>
         ? StructProperties<InnerDefs>
         : never;
